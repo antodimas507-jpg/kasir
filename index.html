@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kasir Warung Nasi Mpok Nani</title>
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFC107">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Warung Digital">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Main Container to mock mobile screen if on desktop -->
+    <div class="app-container">
+        
+        <!-- App Bar (Top Header) -->
+        <header class="app-bar">
+            <div class="brand">
+                <span class="icon-store">🏪</span> KASIR MPOK NANI
+            </div>
+            <div class="app-bar-actions">
+                <div class="pos-badge" id="posBadge" style="display:none;">POS</div>
+                <button class="btn-icon" id="btnExport" onclick="exportData()" style="display:none;">📥</button>
+                <button class="btn-icon" id="btnSearch">🔍</button>
+                <button class="btn-icon add-menu-btn" id="btnOpenAddMenu" onclick="openAddMenu()">➕</button>
+            </div>
+        </header>
+
+        <!-- Tab Jualan (Home) -->
+        <div id="tab-jualan" class="tab-content active">
+            <!-- Product Grid -->
+            <main class="product-grid" id="productGrid">
+                <!-- Products injected by JS -->
+            </main>
+        </div>
+
+        <!-- Tab Keranjang -->
+        <div id="tab-keranjang" class="tab-content">
+            <div class="page-title">
+                <h2>🛍️ DAFTAR BELANJA</h2>
+                <button class="btn-text-red" onclick="clearCart()">Kosongkan</button>
+            </div>
+            
+            <main class="cart-list" id="cartList">
+                <!-- Cart Items injected by JS -->
+            </main>
+            
+            <!-- Checkout Section -->
+            <div class="checkout-panel">
+                <div class="black-panel">
+                    <div class="total-row">
+                        <span>TOTAL BELANJA</span>
+                        <span id="cartTotalText">Rp 0</span>
+                    </div>
+                    
+                    <label class="payment-label">PEMBAYARAN TUNAI (RP)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="uangDiterima" class="input-tunai" placeholder="MASUKKAN JUMLAH" pattern="[0-9]*" inputmode="numeric">
+                        <!-- Quick buttons inline or below? Below for clarity -->
+                    </div>
+                    <div class="quick-money" id="quickMoneyButtons">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <div class="kembalian-box">
+                        <span class="kembalian-label">KEMBALIAN ANDA</span>
+                        <span id="kembalianText" class="kembalian-amount">Rp 0</span>
+                    </div>
+                </div>
+                
+                <button class="btn-bayar-sekarang" id="btnSelesai" onclick="finishTransaction()">
+                    <span class="check-icon">✔️</span> BAYAR SEKARANG
+                </button>
+                <button class="btn-bayar-sekarang" id="btnCetak" onclick="printReceipt()" style="display:none; background-color:#888;">
+                    <span class="check-icon">🖨️</span> CETAK STRUK
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Riwayat -->
+        <div id="tab-riwayat" class="tab-content">
+            <div class="page-title-box">
+                <h2>RIWAYAT JUALAN</h2>
+                <p>Daftar pesanan yang sudah selesai.</p>
+                <div class="today-income-box" id="todayIncome">Pendapatan: Rp 0</div>
+                <button class="btn-download-report mt-10" onclick="exportData()">📥 DOWNLOAD LAPORAN (CSV)</button>
+            </div>
+
+            <main class="history-list" id="historyList">
+                <!-- History items injected by JS -->
+            </main>
+        </div>
+
+        <!-- Add Menu Modal -->
+        <div id="addMenuModal" class="modal">
+            <div class="modal-content modal-menu">
+                <button class="btn-close-modal" onclick="closeAddMenu()">✖</button>
+                <h2 id="addMenuModalTitle">TAMBAH MENU BARU</h2>
+                
+                <input type="hidden" id="editMenuId" value="">
+                
+                <label class="form-label mt-10">Nama Menu</label>
+                <input type="text" id="menuName" class="form-input" placeholder="Contoh: Nasi Goreng Spesial">
+                
+                <label class="form-label mt-10">Harga (Rp)</label>
+                <input type="number" id="menuPrice" class="form-input" placeholder="Contoh: 15000" inputmode="numeric">
+
+                <div class="modal-actions-grid mt-10">
+                    <button class="btn-cancel" onclick="closeAddMenu()">BATAL</button>
+                    <button class="btn-save" onclick="saveNewMenu()">SIMPAN</button>
+                </div>
+                <button id="btnDeleteMenu" class="btn-delete mt-10" onclick="deleteMenu()" style="display:none; width:100%">🗑️ HAPUS MENU INI</button>
+            </div>
+        </div>
+
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="switchTab('jualan')">
+                <div class="nav-icon">🏪</div>
+                <div class="nav-text">JUALAN</div>
+            </button>
+            <button class="nav-btn" onclick="switchTab('keranjang')">
+                <div class="nav-icon">🛍️</div>
+                <div class="nav-text">KERANJANG</div>
+                <span class="badge" id="cartBadge" style="display:none;">0</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('riwayat')">
+                <div class="nav-icon">🕒</div>
+                <div class="nav-text">RIWAYAT</div>
+            </button>
+        </nav>
+
+        <!-- Hidden audio for beep sound -->
+        <audio id="beepSound" preload="auto">
+            <source src="" type="audio/wav"> <!-- Will use web audio API instead -->
+        </audio>
+
+    </div> <!-- App Container -->
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('sw.js').catch(function(err) {});
+        });
+      }
+    </script>
+</body>
+</html>
