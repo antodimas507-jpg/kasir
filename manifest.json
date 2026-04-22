@@ -1,27 +1,11 @@
 {
-  "name": "Kasir Warung Nasi Mpok Nani",
-  "short_name": "Kasir Mpok Nani",
-  "description": "Sistem Point of Sale (POS) sederhana untuk Warung Nasi Mpok Nani",
-  "start_url": "./index.html",
-  "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#FFC107",
-  "orientation": "portrait",
   "dir": "ltr",
-  "lang": "id-ID",
-  "icons": [
-    {
-      "src": "launchericon-48x48.png",
-      "sizes": "48x48",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-    "src": "launchericon-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "maskable"
-  }
-    }
-  ]
+  "display": "standalone",
+  "name": "Warung Digital",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Warung Digital",
+  "start_url": "/",
+  "theme_color": "#FFC107"
 }
