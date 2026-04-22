@@ -11,13 +11,13 @@
   "lang": "id-ID",
   "icons": [
     {
-      "src": "launchericon-48x48.png",
+      "src": "./launchericon-48x48.png",
       "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
     },
     {
-    "src": "./icon-512.png",
+    "src": "./launchericon-512x512.png",
     "sizes": "512x512",
     "type": "image/png",
     "purpose": "maskable"
